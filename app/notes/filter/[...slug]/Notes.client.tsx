@@ -11,16 +11,21 @@ import Loader from '@/components/Loader/Loader';
 import Modal from '@/components/Modal/Modal';
 import Pagination from '@/components/Pagination/Pagination';
 import SearchBox from '@/components/SearchBox/SearchBox';
+import type { NoteTag } from '@/types/note';
 import css from './NotesPage.module.css';
 
-export default function NotesClient() {
+interface NotesClientProps {
+  tag?: NoteTag;
+}
+
+export default function NotesClient({ tag }: NotesClientProps) {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: ['notes', page, search],
-    queryFn: () => fetchNotes({ page, search }),
+    queryKey: ['notes', page, search, tag],
+    queryFn: () => fetchNotes({ page, search, tag }),
     placeholderData: keepPreviousData,
     refetchOnMount: false,
   });
